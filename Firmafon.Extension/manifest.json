@@ -1,0 +1,33 @@
+﻿{
+  "manifest_version": 2,
+  "name": "Firmafon Caller",
+  "description": "This extension allows you to press tel-links and have it call you using Firmafon",
+  "version": "1.0",
+  "browser_action": {
+    "default_icon": "logo.png",
+    "default_popup": "popup.html",
+    "default_title": "Firmafon Caller"
+  },
+  "permissions": [
+    "activeTab",
+    "storage",
+    "webNavigation",
+    "tabs"
+  ],
+  "background": {
+    "scripts": [ "background.js" ],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "tel-overrider.js"
+      ],
+      "run_at": "document_end"
+    }
+  ]
+}

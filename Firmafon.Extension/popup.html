@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Firmafon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+    <div id="login-section" class="section">
+        <form id="login-form">
+            <button type="button" class="authorize-button">
+                Click here to authorize
+            </button>
+        </form>
+    </div>
+
+    <div id="call-section" class="section">
+        <div class="welcome">
+            <button class="signout-button">
+                <i class="fa fa-sign-out"></i>
+            </button>
+            Hey, <span class="employee-name"></span>
+        </div>
+
+        <h3>Call</h3>
+        <form id="call-form">
+            <input id="call-number" class="call-number" type="tel" autofocus autocomplete="off" />
+            <button class="call-button" type="submit">
+                <i class="fa fa-phone"></i>
+            </button>
+        </form>
+
+        <h3>Recall</h3>
+        <div id="latest-calls" style="display:none"></div>
+
+        <h3>Voicemails</h3>
+        <div id="voice-mails" style="display:none"></div>
+    </div>
+
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>
