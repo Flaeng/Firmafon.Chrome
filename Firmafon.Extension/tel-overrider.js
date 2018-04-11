@@ -30,6 +30,12 @@ function handleTel(anchorTag) {
 var apiRootPath = "https://app.firmafon.dk/";
 function call(phoneNo, accessToken) {
 
+    phoneNo.replace("+", "00");
+    if (phoneNo[0] !== '0' || phoneNo[1] !== '0') {
+        if (phoneNo.length == 8)
+            phoneNo = "45" + phoneNo;
+    }
+
     var url = apiRootPath + "api/v2/switch/dial?to_number=" + phoneNo + "&access_token=" + accessToken;
     console.log("url", url);
 
