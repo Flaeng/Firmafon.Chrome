@@ -66,35 +66,43 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="authorize-complete.html" />
-    <Content Include="background.js" />
-    <Content Include="jquery-3.3.1.min.js" />
-    <Content Include="jquery-3.3.1.slim.min.js" />
+    <Content Include="background\background.js" />
+    <Content Include="thirdparty\angular-1.6.9.min.js" />
+    <Content Include="thirdparty\font-awesome-4.7.0.min.css" />
+    <Content Include="thirdparty\jquery-3.3.1.min.js" />
     <Content Include="logo.png" />
-    <Content Include="popup.css">
+    <Content Include="popup\popup.css">
       <DependentUpon>popup.less</DependentUpon>
     </Content>
-    <Content Include="popup.html" />
-    <Content Include="popup.js" />
-    <Content Include="popup.min.css">
+    <Content Include="popup\popup.html" />
+    <Content Include="popup\popup.js" />
+    <Content Include="popup\popup.min.css">
       <DependentUpon>popup.css</DependentUpon>
     </Content>
-    <Content Include="tel-overrider.js" />
+    <Content Include="services\firmafon.js" />
+    <Content Include="services\helper.js" />
+    <Content Include="background\tel-overrider.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="popup.less" />
+    <Content Include="popup\popup.less" />
   </ItemGroup>
   <ItemGroup>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

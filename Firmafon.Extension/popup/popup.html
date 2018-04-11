@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Firmafon</title>
+    <link rel="stylesheet" href="../thirdparty/font-awesome-4.7.0.min.css" />
+    <link rel="stylesheet" href="popup.css" />
+</head>
+<body ng-app="FirmafonExtension">
+    <div ng-controller="MainController">
+
+        <div id="login-section" class="section" ng-controller="LoginController">
+            <form id="login-form">
+                <button type="button" class="authorize-button">
+                    Click here to authorize
+                </button>
+            </form>
+        </div>
+
+        <div id="call-section" class="section">
+            <div class="welcome">
+                <button class="signout-button">
+                    <i class="fa fa-sign-out"></i>
+                </button>
+                Hey, <span class="employee-name"></span>
+            </div>
+
+            <div ng-controller="CallController">
+                <h3>Call</h3>
+                <form id="call-form">
+                    <input id="call-number" class="call-number" type="tel" autofocus autocomplete="off" />
+                    <button class="call-button" type="submit">
+                        <i class="fa fa-phone"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div ng-controller="RecentCallsController">
+                <h3>Recent Calls</h3>
+                <div id="latest-calls" style="display:none"></div>
+            </div>
+
+            <div ng-controller="VoiceMailController">
+                <h3>Voicemails</h3>
+                <div id="voice-mails" style="display:none"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="../thirdparty/jquery-3.3.1.min.js"></script>
+    <script src="../thirdparty/angular-1.6.9.min.js"></script>
+    <script src="../services/helper.js"></script>
+    <script src="../services/firmafon.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>

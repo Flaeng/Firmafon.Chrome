@@ -1,11 +1,30 @@
-﻿//global
+﻿var app = angular.module('FirmafonExtension', []);
+
+app.controller('MainController', function () {
+
+});
+
+app.controller('LoginController', function () {
+    //console.log('Now you login');
+});
+
+app.controller('CallController', function () {
+    //console.log('Now you call people');
+});
+
+app.controller('VoiceMailController', function () {
+    //console.log("Here's your voicemails");
+});
+
+app.controller('RecentCallsController', function () {
+    //console.log("Here's your recent calls");
+});
+
+//global
 var accessToken = null;
-var apiRootPath = "https://app.firmafon.dk/";
 
 function resetApp() {
-    chrome.storage.sync.set({ accessToken: null }, function (result) {
-        init();
-    });
+    helper.setAccessToken(null, init);
 }
 function closeExtensionWindow() {
     chrome.tabs.getCurrent(function (currentTab) {
@@ -15,44 +34,30 @@ function closeExtensionWindow() {
 }
 
 //login-form
-var applicationId = "563eece46fb65c2f735f0d9c7a2215b25469d948e5ae4513193a8b373cc85f52";
-var redirectUrl = "http://firmafon-auth-complete";
-var authorizeLink = "https://app.firmafon.dk/api/v2/authorize" +
-    "?client_id=" + applicationId +
-    "&response_type=code" +
-    "&redirect_uri=" + redirectUrl;
-
 function initWithAccessToken(token) {
 
-    var url = apiRootPath + 'api/v2/employee?access_token=' + accessToken;
+    firmafon.getCurrentEmployee(function (employee) {
 
-    $.get(url, function (data) {
-        console.log('employee', data);
-
-        var employeeShortName = data.employee.name.split(' ')[0];
-        $(".employee-name").html(employeeShortName);
-    })
-        .fail(function (data) {
-            console.log('got error', data);
-            if (data.status == 401) {
-                resetApp();
-            }
-        });
+        if (employee) {
+            //Display users name
+            var employeeShortName = employee.name.split(' ')[0];
+            $(".employee-name").html(employeeShortName);
+        } else {
+            //If employee is null, token has expired - reset app
+            resetApp();
+        }
+    });
 }
-
-
 function init() {
-    chrome.storage.sync.get(['accessToken'], function (result) {
-        console.log("accessToken", result);
-        accessToken = result.accessToken;
-
-        console.log('got token', accessToken);
+    helper.getAccessToken(function (accessToken) {
+        
         if (accessToken) {
             $("#call-section").css("display", "block");
             $("#login-section").css("display", "none");
             initWithAccessToken(accessToken);
             fetchLastestCalls();
             fetchVoiceMails();
+            $("#call-number").focus();
         } else {
             $("#call-section").css("display", "none");
             $("#login-section").css("display", "block");
@@ -74,6 +79,7 @@ $("#call-form").submit(function (e) {
 
     var phoneNo = $("#call-number").val();
     call(phoneNo);
+    closeExtensionWindow();
 });
 
 $(".signout-button").click(function () {
@@ -82,26 +88,15 @@ $(".signout-button").click(function () {
 
 function fetchVoiceMails() {
 
-    var url = apiRootPath + 'api/v2/voice_mails?limit=50&access_token=' + accessToken;
-    
-    $.get(url, function (data) {
-        console.log('voice-mails', data);
+    helper.fetchVoiceMails(function (voice_mails) {
 
         var voiceMails = $("#voice-mails");
-        var toNumber = [];
-
-        var numberOfUnheard = 0;
-
+        
         voiceMails.empty();
 
-        for (var i = 0; i < data.voice_mails.length && i < 5; i++) {
-            let callItem = data.voice_mails[i];
-
-            if (callItem.heard)
-                continue;
-
-            numberOfUnheard++;
-
+        for (var i = 0; i < voice_mails.length && i < 5; i++) {
+            let callItem = voice_mails[i];
+            
             let item = $("<div>");
             item.attr('class', 'voicemail-item list-item');
 
@@ -110,8 +105,7 @@ function fetchVoiceMails() {
                 anchorText = callItem.from_contact.name;
             }
             let date = new Date(callItem.created_at);
-            //console.log('date', date);
-            item.html('<b>' + anchorText + '</b><br /><small>' + formatDate(date) + '</small>');
+            item.html('<b>' + anchorText + '</b><br /><small>' + helper.formatDate(date) + '</small>');
 
 
             let listenAnchor = $("<a>");
@@ -121,48 +115,35 @@ function fetchVoiceMails() {
             });
             listenAnchor.html('<i class="fa fa-phone-square"></i> Listen to voicemail');
             listenAnchor.appendTo(item);
-            
+
             let callbackAnchor = $("<a>");
             callbackAnchor.addClass('display-block');
             callbackAnchor.click(function () {
                 call(callItem.from_number);
             });
-            callbackAnchor.html('<i class="fa fa-phone"></i> +' + callItem.from_number_formatted);
+            callbackAnchor.html('<i class="fa fa-phone"></i> ' + callItem.from_number_formatted);
             callbackAnchor.appendTo(item);
-            
+
             voiceMails.append(item);
         }
-        
-        if (numberOfUnheard == 0) {
-            chrome.browserAction.setBadgeText({ text: '' });
+
+        if (voice_mails.length == 0) {
             voiceMails.html("You've heard all your voicemails");
-        } else {
-            chrome.browserAction.setBadgeText({ text: numberOfUnheard.toString() });
-            chrome.browserAction.setBadgeBackgroundColor({ color: '#000' });
         }
         voiceMails.show();
-    })
-        .fail(function (data) {
-            console.log('got error', data);
-        });
+    });
 }
 
-function formatDate(date) {
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString().replace(/\./g, ':');
-}
+
 
 function fetchLastestCalls() {
-    
-    var url = apiRootPath + 'api/v2/calls?limit=20&access_token=' + accessToken;
-
-    $.get(url, function (data) {
-        console.log('calls', data);
+    helper.fetchRecentCalls(function (data) {
 
         var latestCalls = $("#latest-calls");
         var toNumber = [];
 
-        for (var i = 0; i < data.calls.length; i++) {
-            let callItem = data.calls[i];
+        for (var i = 0; i < data.length; i++) {
+            let callItem = data[i];
 
             let isIngoing = callItem.direction === 'incoming';
 
@@ -174,19 +155,19 @@ function fetchLastestCalls() {
 
             if (toNumber.length == 5)
                 break;
-            if (toNumber.indexOf(number) != -1)
-                continue;
+            //if (toNumber.indexOf(number) != -1)
+                //continue;
             else
                 toNumber.push(number);
 
-            console.log('call', callItem);
+            //console.log('call', callItem);
 
             let item = $("<div>");
             item.attr('class', 'call-item list-item');
 
             let anchorText = (contact && contact.name) ? contact.name : 'Unknown';
             let date = new Date(callItem.started_at);
-            item.html('<b>' + anchorText + '</b><br /><small>' + formatDate(date) + '</small>');
+            item.html('<b>' + anchorText + '</b><br /><small>' + helper.formatDate(date) + ' - ' + callItem.direction + ' - ' + helper.formatDuration(callItem.talk_duration) + '</small>');
 
 
             let telAnchor = $("<a>");
@@ -210,11 +191,7 @@ function fetchLastestCalls() {
             latestCalls.append(item);
         }
         latestCalls.show();
-
-    })
-        .fail(function (data) {
-            console.log('got error', data);
-        });
+    });
 }
 
 function mailto(email) {
@@ -224,33 +201,8 @@ function mailto(email) {
 
 
 //helpers
-
-//function post(url, data, callback) {
-//    var request = new XMLHttpRequest();
-//    request.onload = function () {
-//        var json = request.responseText;
-//        console.log('json', json);
-//        var response = JSON.parse(json);
-//        callback(response);
-//    }
-//    request.open("POST", url, true);
-//    request.send(data);
-//}
-
 function call(phoneNo) {
-
-    phoneNo.replace("+", "00");
-    if (phoneNo[0] !== '0' || phoneNo[1] !== '0') {
-        if (phoneNo.length == 8)
-            phoneNo = "45" + phoneNo;
-    }
-
-    var url = apiRootPath + "api/v2/switch/dial?to_number=" + phoneNo + "&access_token=" + accessToken;
-    console.log("url", url);
-    //$.post(url)
-    //    .success(function () {
-    //        console.log('http post done');
-    //          closeExtensionWindow();
-    //    });
-    closeExtensionWindow();
+    firmafon.call(phoneNo, accessToken, function () {
+        closeExtensionWindow();
+    });
 }

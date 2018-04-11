@@ -5,7 +5,7 @@
   "version": "1.0",
   "browser_action": {
     "default_icon": "logo.png",
-    "default_popup": "popup.html",
+    "default_popup": "popup/popup.html",
     "default_title": "Firmafon Caller"
   },
   "permissions": [
@@ -15,9 +15,16 @@
     "tabs"
   ],
   "background": {
-    "scripts": [ "background.js" ],
+    "scripts": [
+      //"https://pubsub.firmafon.dk/faye/client.js",
+      "thirdparty/jquery-3.3.1.min.js",
+      "services/firmafon.js",
+      "services/helper.js",
+      "background/background.js"
+    ],
     "persistent": false
   },
+  "content_security_policy": "script-src 'self' https://pubsub.firmafon.dk; object-src 'self'",
   "content_scripts": [
     {
       "matches": [
@@ -25,7 +32,10 @@
         "https://*/*"
       ],
       "js": [
-        "tel-overrider.js"
+        "thirdparty/jquery-3.3.1.min.js",
+        "services/firmafon.js",
+        "services/helper.js",
+        "background/tel-overrider.js"
       ],
       "run_at": "document_end"
     }
