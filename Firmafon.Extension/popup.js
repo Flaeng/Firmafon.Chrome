@@ -82,8 +82,8 @@ $(".signout-button").click(function () {
 
 function fetchVoiceMails() {
 
-    var url = apiRootPath + 'api/v2/voice_mails?limit=20&access_token=' + accessToken;
-
+    var url = apiRootPath + 'api/v2/voice_mails?limit=50&access_token=' + accessToken;
+    
     $.get(url, function (data) {
         console.log('voice-mails', data);
 
@@ -92,11 +92,15 @@ function fetchVoiceMails() {
 
         var numberOfUnheard = 0;
 
+        voiceMails.empty();
+
         for (var i = 0; i < data.voice_mails.length && i < 5; i++) {
             let callItem = data.voice_mails[i];
 
-            if (callItem.header)
-                numberOfUnheard++;
+            if (callItem.heard)
+                continue;
+
+            numberOfUnheard++;
 
             let item = $("<div>");
             item.attr('class', 'voicemail-item list-item');
@@ -128,13 +132,15 @@ function fetchVoiceMails() {
             
             voiceMails.append(item);
         }
-        voiceMails.show();
-
-        if (numberOfUnheard == 0)
+        
+        if (numberOfUnheard == 0) {
             chrome.browserAction.setBadgeText({ text: '' });
-        else
+            voiceMails.html("You've heard all your voicemails");
+        } else {
             chrome.browserAction.setBadgeText({ text: numberOfUnheard.toString() });
-
+            chrome.browserAction.setBadgeBackgroundColor({ color: '#000' });
+        }
+        voiceMails.show();
     })
         .fail(function (data) {
             console.log('got error', data);
