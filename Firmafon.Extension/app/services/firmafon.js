@@ -36,7 +36,7 @@ var firmafon = {
     call: function (phoneNo, accessToken, callback) {
         let url = apiRootPath + "api/v2/switch/dial?to_number=" + phoneNo + "&access_token=" + accessToken;
         console.log('POST', url);
-        //jQuery.post(url, null, callback);
+        jQuery.post(url, null, callback);
     },
 
     authenticate: function () {
