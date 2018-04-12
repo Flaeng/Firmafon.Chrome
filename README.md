@@ -9,3 +9,7 @@ Features
 
 
 ![Example Image is missing](screenshot1.jpg)
+
+
+This plugin is NOT made by Firmafon
+Please do not contact Firmafon for support for this extension
