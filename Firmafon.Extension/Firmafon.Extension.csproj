@@ -66,11 +66,13 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="background\background.html" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="background\background.js" />
+    <Content Include="services\analytics.js" />
     <Content Include="thirdparty\angular-1.6.9.min.js" />
     <Content Include="thirdparty\font-awesome-4.7.0.min.css" />
     <Content Include="thirdparty\jquery-3.3.1.min.js" />

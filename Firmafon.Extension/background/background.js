@@ -1,4 +1,6 @@
-﻿
+﻿//Trigger Google Analytics
+analytics.trackEvent('extension', 'loaded');
+
 
 //Used to handle firmafon authentication
 chrome.webNavigation.onBeforeNavigate.addListener(function (details) {
@@ -12,8 +14,10 @@ chrome.webNavigation.onBeforeNavigate.addListener(function (details) {
     chrome.tabs.remove(details.tabId);
 
     //send background request
+    analytics.trackEvent('firmafon', 'authenticated');
     firmafon.getAccessTokenFromCode(code, function (token) {
         helper.setAccessToken(token);
+        firmafon.initWithFaye(token);
     });
 
 }, {
@@ -49,3 +53,10 @@ function tryUpdateLocalData() {
     });
 }
 
+
+helper.getAccessToken(function (token) {
+    if (token) {
+        //console.log('firmafon.init', token);
+        firmafon.initWithFaye(token);
+    }
+});

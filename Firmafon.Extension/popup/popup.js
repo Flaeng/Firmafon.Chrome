@@ -1,29 +1,33 @@
-﻿var app = angular.module('FirmafonExtension', []);
+﻿//var app = angular.module('FirmafonExtension', []);
 
-app.controller('MainController', function () {
+//app.controller('MainController', function () {
 
-});
+//});
 
-app.controller('LoginController', function () {
-    //console.log('Now you login');
-});
+//app.controller('LoginController', function () {
+//    //console.log('Now you login');
+//});
 
-app.controller('CallController', function () {
-    //console.log('Now you call people');
-});
+//app.controller('CallController', function () {
+//    //console.log('Now you call people');
+//});
 
-app.controller('VoiceMailController', function () {
-    //console.log("Here's your voicemails");
-});
+//app.controller('VoiceMailController', function () {
+//    //console.log("Here's your voicemails");
+//});
 
-app.controller('RecentCallsController', function () {
-    //console.log("Here's your recent calls");
-});
+//app.controller('RecentCallsController', function () {
+//    //console.log("Here's your recent calls");
+//});
+
+analytics.trackEvent('popup', 'opened');
+analytics.trackPageView();
 
 //global
 var accessToken = null;
 
 function resetApp() {
+    analytics.trackEvent('firmafon', 'dropping token');
     helper.setAccessToken(null, init);
 }
 function closeExtensionWindow() {
@@ -67,6 +71,7 @@ function init() {
 init();
 
 $(".authorize-button").click(function () {
+    analytics.trackEvent('firmafon', 'authenticating');
     chrome.tabs.create({ url: authorizeLink });
     closeExtensionWindow();
 });
@@ -75,6 +80,7 @@ $(".authorize-button").click(function () {
 //call-form
 
 $("#call-form").submit(function (e) {
+    analytics.trackEvent('popup', 'calling number');
     e.preventDefault();
 
     var phoneNo = $("#call-number").val();
@@ -145,6 +151,8 @@ function fetchLastestCalls() {
         for (var i = 0; i < data.length; i++) {
             let callItem = data[i];
 
+            console.log('callItem', callItem);
+
             let isIngoing = callItem.direction === 'incoming';
 
             let contact = isIngoing ? callItem.from_contact : callItem.to_contact;
@@ -167,7 +175,13 @@ function fetchLastestCalls() {
 
             let anchorText = (contact && contact.name) ? contact.name : 'Unknown';
             let date = new Date(callItem.started_at);
-            item.html('<b>' + anchorText + '</b><br /><small>' + helper.formatDate(date) + ' - ' + callItem.direction + ' - ' + helper.formatDuration(callItem.talk_duration) + '</small>');
+            let status = callItem.status == 'ringing' || callItem.status == 'answered' ?
+                callItem.direction :
+                callItem.status == 'orphaned' ? 
+                    'missed' :
+                    callItem.status;
+
+            item.html('<b>' + anchorText + '</b><br /><small>' + helper.formatDate(date) + ' - ' + status + ' - ' + helper.formatDuration(callItem.talk_duration) + '</small>');
 
 
             let telAnchor = $("<a>");
@@ -195,6 +209,7 @@ function fetchLastestCalls() {
 }
 
 function mailto(email) {
+    analytics.trackEvent('popup', 'using mailto contact');
     console.log('mailto', email);
     chrome.tabs.create({ url: 'mailto:' + email });
 }

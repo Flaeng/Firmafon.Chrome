@@ -2,5 +2,9 @@
   {
     "outputFile": "popup.css",
     "inputFile": "popup.less"
+  },
+  {
+    "outputFile": "popup/popup.css",
+    "inputFile": "popup/popup.less"
   }
 ]

@@ -49,5 +49,38 @@ button {
   margin: 0 -5px;
 }
 .list-item:nth-child(2n + 1) {
-  background-color: #f3f3f3;
+  /*background-color:#f3f3f3;*/
+  background-color: rgba(49, 119, 90, 0.1);
+}
+.disclaimer {
+  text-align: center;
+  font-size: .5rem;
+}
+.authorize-button {
+  display: block;
+  width: 100%;
+}
+.issue-link {
+  margin-top: 20px;
+  margin-bottom: 5px;
+  display: block;
+  padding: 5px 10px;
+  text-decoration: none;
+  white-space: nowrap;
+  text-align: center;
+  border-radius: 15px;
+  background-color: #31775a;
+  color: #FFF;
+}
+.issue-link:hover {
+  color: #e3e2de;
+}
+button {
+  text-align: center;
+  background-color: #31775a;
+  border-color: #31775a;
+  color: #FFF;
+}
+button:hover {
+  color: #e3e2de;
 }

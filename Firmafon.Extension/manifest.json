@@ -12,19 +12,14 @@
     "activeTab",
     "storage",
     "webNavigation",
+    "notifications",
     "tabs"
   ],
   "background": {
-    "scripts": [
-      //"https://pubsub.firmafon.dk/faye/client.js",
-      "thirdparty/jquery-3.3.1.min.js",
-      "services/firmafon.js",
-      "services/helper.js",
-      "background/background.js"
-    ],
+    "page": "background/background.html",
     "persistent": false
   },
-  "content_security_policy": "script-src 'self' https://pubsub.firmafon.dk; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://pubsub.firmafon.dk https://www.google-analytics.com; object-src 'self'",
   "content_scripts": [
     {
       "matches": [
@@ -33,6 +28,7 @@
       ],
       "js": [
         "thirdparty/jquery-3.3.1.min.js",
+        "services/analytics.js",
         "services/firmafon.js",
         "services/helper.js",
         "background/tel-overrider.js"

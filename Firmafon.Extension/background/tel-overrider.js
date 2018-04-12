@@ -8,11 +8,13 @@ $("body").on("click", "a[href^='tel:']", function (event) {
     phoneNo = helper.formatPhoneNo(phoneNo);
 
     //Get user confirmation that they wanna call the number
+    chrome.runtime.sendMessage({ type: "ga", category: "tel-overrider", action: "confirming call" });
     let confirmed = window.confirm('Do you wanna call ' + phoneNo + ' with Firmafon?');
     if (confirmed) {
 
         //Get access token and call the number
         helper.getAccessToken(function (token) {
+            chrome.runtime.sendMessage({ type: "ga", category: "tel-overrider", action: "calling number" });
             firmafon.call(phoneNo, token, function () {
                 alert('Calling: ' + phoneNo);
             });

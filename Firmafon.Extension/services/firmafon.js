@@ -20,13 +20,25 @@ var firmafon = {
 
     accessToken: null,
 
-    call: function (phoneNo, accessToken, callback) {
+    init: function (token) {
+        this.accessToken = token;
+    },
 
+    initWithFaye: function (token) {
+        this.init(token);
+
+        this.getCurrentEmployee(function (employee) {
+            var companyId = employee.company_id;
+            initFaye(token, employee.id, companyId);
+        });
+    },
+
+    call: function (phoneNo, accessToken, callback) {
         let url = apiRootPath + "api/v2/switch/dial?to_number=" + phoneNo + "&access_token=" + accessToken;
         console.log('POST', url);
         //jQuery.post(url, null, callback);
     },
-    
+
     authenticate: function () {
 
     },
@@ -37,6 +49,7 @@ var firmafon = {
         jQuery.post(url, null, function (response) {
             let accessToken = response.access_token;
             this.accessToken = accessToken;
+            console.log('got access token', accessToken);
             callback(accessToken);
             tryUpdateLocalData();
         });
@@ -45,6 +58,7 @@ var firmafon = {
     getCurrentEmployee: function (callback) {
         var url = apiRootPath + 'api/v2/employee?access_token=' + this.accessToken;
         jQuery.get(url, function (data) {
+            //console.log('employee', data.employee);
             callback(data.employee);
         });
     },
@@ -66,31 +80,76 @@ var firmafon = {
             callback(data.calls);
         });
     },
-    
+
 };
 
 
-
 //Notifications
-function initFaye() {
+chrome.notifications.onClicked.addListener(chrome.notifications.clear);
+var notificationsOptions = {
+    type: 'basic',
+    iconUrl: '../logo.png'
+};
+
+function initFaye(token, employeeId, companyId) {
+    //console.log('initFaye token', token);
+    //console.log('initFaye employeeId', employeeId);
+    //console.log('initFaye companyId', companyId);
+
     var client = new Faye.Client('https://pubsub.firmafon.dk/faye');
-    client.subscribe('/call.new', function (call) {
-        console.log('call.new', call);
-        var options = {
-            type: 'basic',
-            title: 'Incoming call',
-            message: call.data.from_number
-        };
-        chrome.notifications.create(call.data.call_uuid, options);
+    //Faye.logger = window.console;
+    
+    client.addExtension({
+        outgoing: function (message, callback) {
+            message.ext = { app: 'Firmafon Chrome Extension', access_token: token };
+            callback(message);
+        }
     });
 
-    client.subscribe('/call.answer', function (call) {
-        console.log('call.answer', call);
-        chrome.notifications.clear(call.data.call_uuid);
+    function handleCall(call) {
+        if (call.direction === 'incoming') {
+            switch (call.status) {
+
+                case 'new':
+                    var options = notificationsOptions;
+                    $.extend(options, {
+                        title: 'Incoming call from',
+                        message: call.endpoint_name + '\n' + call.from_number,
+                    })
+                    chrome.notifications.create(call.call_uuid, options);
+                    break;
+
+                case 'answered':
+                case 'missed':
+                case 'voicemail':
+                case 'orphaned':
+                    chrome.notifications.clear(call.call_uuid, function () { });
+                    break;
+
+            }
+
+        }
+    }
+
+    //handleCall({
+    //    "call_uuid": "c1159322-3e82-11e8-867e-ed7ff40728d9",
+    //    "company_id": "6917",
+    //    "endpoint": "Employee#20621",
+    //    "started_at": "2018-04-12T18:53:14Z",
+    //    "from_number": "4528972584",
+    //    "to_number": "4522755229",
+    //    "direction": "incoming",
+    //    "status": "new",
+    //    "from_number_hidden": "false",
+    //    "endpoint_name": "Dennis Flæng Jørgensen",
+    //    "switch": "b15",
+    //    "a_leg_session_uuid": "c10c065e-3e82-11e8-8653-ed7ff40728d9"
+    //});
+
+    client.subscribe('/call2/employee/' + employeeId, function (message) {
+        //console.log('/call2/employee/' + employeeId, message);
+
+        var data = message.data;
+        handleCall(data);
     });
 }
-
-var d = document.createElement("script");
-d.setAttribute('src', "https://pubsub.firmafon.dk/faye/client.js");
-d.onload = initFaye;
-document.body.appendChild(d);
