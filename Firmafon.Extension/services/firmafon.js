@@ -24,7 +24,7 @@ var firmafon = {
 
         let url = apiRootPath + "api/v2/switch/dial?to_number=" + phoneNo + "&access_token=" + accessToken;
         console.log('POST', url);
-        //$http.post(url, null, callback);
+        //jQuery.post(url, null, callback);
     },
     
     authenticate: function () {
@@ -34,7 +34,7 @@ var firmafon = {
     getAccessTokenFromCode: function (code, callback) {
         let url = fetchAccessTokenUrl + code;
         console.log('POST', url);
-        $http.post(url, null, function (response) {
+        jQuery.post(url, null, function (response) {
             let accessToken = response.access_token;
             this.accessToken = accessToken;
             callback(accessToken);
@@ -44,7 +44,7 @@ var firmafon = {
 
     getCurrentEmployee: function (callback) {
         var url = apiRootPath + 'api/v2/employee?access_token=' + this.accessToken;
-        $.get(url, function (data) {
+        jQuery.get(url, function (data) {
             callback(data.employee);
         });
     },
