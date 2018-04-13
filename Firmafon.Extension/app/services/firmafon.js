@@ -85,7 +85,6 @@ var firmafon = {
 
 
 //Notifications
-chrome.notifications.onClicked.addListener(chrome.notifications.clear);
 var notificationsOptions = {
     type: 'basic',
     iconUrl: '../logo.png'
@@ -95,6 +94,8 @@ function initFaye(token, employeeId, companyId) {
     //console.log('initFaye token', token);
     //console.log('initFaye employeeId', employeeId);
     //console.log('initFaye companyId', companyId);
+
+    chrome.notifications.onClicked.addListener(chrome.notifications.clear);
 
     var client = new Faye.Client('https://pubsub.firmafon.dk/faye');
     //Faye.logger = window.console;

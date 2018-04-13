@@ -28,7 +28,6 @@
       ],
       "js": [
         "thirdparty/jquery-3.3.1.min.js",
-        "services/analytics.js",
         "services/firmafon.js",
         "services/helper.js",
         "background/tel-overrider.js"
