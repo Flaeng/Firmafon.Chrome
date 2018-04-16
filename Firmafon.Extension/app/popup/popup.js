@@ -106,7 +106,7 @@ function fetchVoiceMails() {
             let item = $("<div>");
             item.attr('class', 'voicemail-item list-item');
 
-            let anchorText = 'Unknown (+' + helper.formatPhoneNo(callItem.from_number) + ')';
+            let anchorText = 'Unknown (' + helper.formatPhoneNo(callItem.from_number) + ')';
             if (callItem.from_contact && callItem.from_contact.name) {
                 anchorText = callItem.from_contact.name + '(+' + callItem.from_number + ')';
             }
