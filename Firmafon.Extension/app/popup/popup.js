@@ -106,9 +106,9 @@ function fetchVoiceMails() {
             let item = $("<div>");
             item.attr('class', 'voicemail-item list-item');
 
-            let anchorText = 'Unknown (+' + callItem.from_number + ')';
+            let anchorText = 'Unknown (+' + helper.formatPhoneNo(callItem.from_number) + ')';
             if (callItem.from_contact && callItem.from_contact.name) {
-                anchorText = callItem.from_contact.name;
+                anchorText = callItem.from_contact.name + '(+' + callItem.from_number + ')';
             }
             let date = new Date(callItem.created_at);
             item.html('<b>' + anchorText + '</b><br /><small>' + helper.formatDate(date) + '</small>');
@@ -156,7 +156,7 @@ function fetchLastestCalls() {
             let isIngoing = callItem.direction === 'incoming';
 
             let contact = isIngoing ? callItem.from_contact : callItem.to_contact;
-            let number = (isIngoing ? callItem.from_number : callItem.to_number).toString();
+            let number = helper.formatPhoneNo(isIngoing ? callItem.from_number : callItem.to_number);
             let numberFormatted = isIngoing ? callItem.from_number_formatted : callItem.to_number_formatted;
             let email = isIngoing ? callItem.from_contact.email : callItem.to_contact.email;
             //console.log('contact', contact);
