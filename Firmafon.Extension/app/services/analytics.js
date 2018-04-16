@@ -20,6 +20,18 @@ var analytics = {
 
     trackPageView: function () {
         ga('send', 'pageview');
+    },
+
+    trackError: function (message, source, lineno, colno, error) {
+        let manifestData = chrome.runtime.getManifest();
+        ga('send', 'exception', {
+            'extensionVersion': manifestData.version,
+            'message': message,
+            'source': source,
+            'lineno': lineno,
+            'colno': colno,
+            'error': error,
+        });
     }
 
 }

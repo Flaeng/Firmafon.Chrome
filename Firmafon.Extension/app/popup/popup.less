@@ -1,39 +1,69 @@
 ﻿.section {
-    display:none;
+    display: none;
 }
 
 a, button, [onclick] {
     cursor: pointer;
 }
+
 h3 {
-    margin-bottom:0;
-}
-.display-block {
-    display:block;
+    margin-bottom: 0;
 }
 
+.display-block {
+    display: block;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
 
 #login-form {
     button {
-        white-space:nowrap;
-        padding:1rem;
+        white-space: nowrap;
+        padding: 1rem;
     }
 }
 
 .welcome {
-    white-space:nowrap;
-    line-height:26px;
+    white-space: nowrap;
+    /*line-height:26px;*/
 
-    .signout-button {
-        float:right;
+    &:after {
+        display:block;
+        content:' ';
+        clear:both;
+    }
+}
+
+.settings-button {
+    float: right;
+
+    &.active {
+        -webkit-box-shadow: inset 0 5px 5px rgba(0,0,0,.25);
+        box-shadow: inset 0 5px 5px rgba(0,0,0,.25);
     }
 }
 
 input,
-button {
+button,
+textarea,
+select {
     border: 1px solid #cad0d6;
     border-radius: .25rem;
+}
+input {
+    padding: 5px;
+}
+button {
     padding: .375rem .75rem;
+}
+
+.call-item {
+    b, small, a {
+        display: block;
+        .no-wrap()
+    }
 }
 
 #call-form {
@@ -52,55 +82,100 @@ button {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
     }
-
 }
 
 .list-item {
     padding: 5px;
     margin: 0 -5px;
 
-    &:nth-child(2n + 1) {
+    &:nth-child(2n) {
         /*background-color:#f3f3f3;*/
-        background-color:rgba(49,119,90,.1);
+        background-color: rgba(49,119,90,.1);
     }
 }
 
 .disclaimer {
-    text-align:center;
-    font-size:.5rem;
+    text-align: center;
+    font-size: .5rem;
 }
 
 .authorize-button {
-    display:block;
-    width:100%;
+    display: block;
+    width: 100%;
 }
 
 .issue-link {
-    margin-top:20px;
-    margin-bottom:5px;
-    display:block;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    display: block;
     padding: 5px 10px;
-    text-decoration:none;
-    white-space:nowrap;
-    
-    text-align:center;
-    border-radius:15px;
-    background-color:#31775a;
-    color:#FFF;
+    text-decoration: none;
+    white-space: nowrap;
+    text-align: center;
+    border-radius: 15px;
+    background-color: #31775a;
+    color: #FFF;
 
     &:hover {
-        color:#e3e2de;
+        color: #e3e2de;
     }
 }
 
-button{
-    text-align:center;
-    background-color:#31775a;
-    border-color:#31775a;
-    color:#FFF;
+button {
+    text-align: center;
+    background-color: #31775a;
+    border-color: #31775a;
+    color: #FFF;
 
     &:hover {
-        color:#e3e2de;
+        color: #e3e2de;
+    }
+}
+
+
+#settings-section {
+
+
+
+
+    .add-rule,
+    .signout-button {
+        margin-top: 20px;
+        width: 100%;
+    }
+}
+
+
+table.small {
+    th, td {
+        font-size:smaller;
+        vertical-align:top;
+        white-space:nowrap;
+    }
+}
+
+.trigger-rule {
+
+
+    input[type=checkbox] {
+        width:auto;
+    }
+    .checkbox {
+        span {
+            position:relative;
+            top:-3px;
+        }
     }
 
+    input {
+        width:calc(~'100% - 12px');
+    }
+
+    > input, 
+    > select, 
+    > textarea, 
+    > .checkbox {
+        width:100%;
+        margin: 5px 0;
+    }
 }

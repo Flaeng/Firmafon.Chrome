@@ -2,11 +2,11 @@
 var helper = {
 
     formatPhoneNo: function (phoneNo) {
-
+        //console.log('formatting', phoneNo);
         if (!phoneNo)
             return 'Hidden number';
 
-        return '+' + phoneNo;
+        return phoneNo.indexOf('00') === -1 ? '+' + phoneNo : phoneNo;
     },
 
     getAccessToken: function (callback) {
@@ -64,9 +64,24 @@ var helper = {
         });
     },
 
+    saveTotalCallTime: function (totalCallTime) {
+        chrome.storage.local.set({ 'totalCallTime': totalCallTime }, function () {
+            //console.log('Saved to local storage (key: voiceMails)', voiceMails);
+        });
+    },
+    fetchTotalCallTime: function (callback) {
+        chrome.storage.local.get(['totalCallTime'], function (result) {
+            callback(result.totalCallTime);
+        });
+    },
+
     setBadge: function (text) {
         chrome.browserAction.setBadgeText({ 'text': (text || '').toString() });
         chrome.browserAction.setBadgeBackgroundColor({ 'color': '#000' });
+    },
+
+    logError: function (message, source, lineno, colno, error) {
+        analytics.trackError(message, source, lineno, colno, error);
     }
 
 };

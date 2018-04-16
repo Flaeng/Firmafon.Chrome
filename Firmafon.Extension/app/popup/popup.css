@@ -12,22 +12,47 @@ h3 {
 .display-block {
   display: block;
 }
+.no-wrap {
+  white-space: nowrap;
+}
 #login-form button {
   white-space: nowrap;
   padding: 1rem;
 }
 .welcome {
   white-space: nowrap;
-  line-height: 26px;
+  /*line-height:26px;*/
 }
-.welcome .signout-button {
+.welcome:after {
+  display: block;
+  content: ' ';
+  clear: both;
+}
+.settings-button {
   float: right;
 }
+.settings-button.active {
+  -webkit-box-shadow: inset 0 5px 5px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 5px 5px rgba(0, 0, 0, 0.25);
+}
 input,
-button {
+button,
+textarea,
+select {
   border: 1px solid #cad0d6;
   border-radius: .25rem;
+}
+input {
+  padding: 5px;
+}
+button {
   padding: .375rem .75rem;
+}
+.call-item b,
+.call-item small,
+.call-item a {
+  display: block;
+  white-space: nowrap;
 }
 #call-form {
   display: flex;
@@ -48,7 +73,7 @@ button {
   padding: 5px;
   margin: 0 -5px;
 }
-.list-item:nth-child(2n + 1) {
+.list-item:nth-child(2n) {
   /*background-color:#f3f3f3;*/
   background-color: rgba(49, 119, 90, 0.1);
 }
@@ -83,4 +108,32 @@ button {
 }
 button:hover {
   color: #e3e2de;
+}
+#settings-section .add-rule,
+#settings-section .signout-button {
+  margin-top: 20px;
+  width: 100%;
+}
+table.small th,
+table.small td {
+  font-size: smaller;
+  vertical-align: top;
+  white-space: nowrap;
+}
+.trigger-rule input[type=checkbox] {
+  width: auto;
+}
+.trigger-rule .checkbox span {
+  position: relative;
+  top: -3px;
+}
+.trigger-rule input {
+  width: calc(100% - 12px);
+}
+.trigger-rule > input,
+.trigger-rule > select,
+.trigger-rule > textarea,
+.trigger-rule > .checkbox {
+  width: 100%;
+  margin: 5px 0;
 }

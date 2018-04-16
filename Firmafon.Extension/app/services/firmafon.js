@@ -72,8 +72,8 @@ var firmafon = {
         });
     },
 
-    getUnheardVoiceMails: function (callback) {
-        var url = apiRootPath + 'api/v2/voice_mails?limit=50&access_token=' + this.accessToken;
+    getUnheardVoiceMails: function (limit, callback) {
+        var url = apiRootPath + 'api/v2/voice_mails?limit=' + limit + '&access_token=' + this.accessToken;
         jQuery.get(url, function (data) {
             var vMails = $.grep(data.voice_mails, function (elem) {
                 return !elem.heard;
@@ -83,8 +83,8 @@ var firmafon = {
         });
     },
 
-    getRecentCalls: function (callback) {
-        var url = apiRootPath + 'api/v2/calls?limit=20&access_token=' + this.accessToken;
+    getRecentCalls: function (limit, callback) {
+        var url = apiRootPath + 'api/v2/calls?limit=' + limit + '&access_token=' + this.accessToken;
         jQuery.get(url, function (data) {
             callback(data.calls);
         });
@@ -98,17 +98,86 @@ var notificationsOptions = {
     type: 'basic',
     iconUrl: '../logo.png'
 };
+function handleCall(call) {
+    if (call.direction === 'incoming') {
+        switch (call.status) {
+
+            case 'new':
+                var options = notificationsOptions;
+                $.extend(options, {
+                    title: 'Incoming call from',
+                    message: call.endpoint_name + '\n' + helper.formatPhoneNo(call.from_number),
+                })
+                chrome.notifications.create(call.call_uuid, options);
+                animateCall(3);
+                break;
+
+            case 'answered':
+            case 'missed':
+            case 'voicemail':
+            case 'orphaned':
+                chrome.notifications.clear(call.call_uuid, function () { });
+                break;
+
+        }
+
+    }
+}
+
+var animationInterval = 100;
+function animateCall(numberOfCycles) {
+    if (numberOfCycles == 0)
+        return;
+
+    setTimeout(function () {
+        helper.setBadge('____C');
+
+        setTimeout(function () {
+            helper.setBadge('___CA');
+
+            setTimeout(function () {
+                helper.setBadge('__CAL');
+
+                setTimeout(function () {
+                    helper.setBadge('_CALL');
+
+                    setTimeout(function () {
+                        helper.setBadge('CALL_');
+
+                        setTimeout(function () {
+                            helper.setBadge('ALL__');
+
+                            setTimeout(function () {
+                                helper.setBadge('LL___');
+
+                                setTimeout(function () {
+                                    helper.setBadge('L____');
+
+                                    setTimeout(function () {
+                                        helper.setBadge('_____');
+
+                                        numberOfCycles--;
+                                        if (numberOfCycles == 0)
+                                            helper.setBadge('');
+                                        else 
+                                            animateCall(numberOfCycles);
+
+                                    }, animationInterval);
+                                }, animationInterval);
+                            }, animationInterval);
+                        }, animationInterval);
+                    }, animationInterval);
+                }, animationInterval);
+            }, animationInterval);
+        }, animationInterval);
+    }, animationInterval);
+}
 
 function initFaye(token, employeeId, companyId) {
-    //console.log('initFaye token', token);
-    //console.log('initFaye employeeId', employeeId);
-    //console.log('initFaye companyId', companyId);
-
     chrome.notifications.onClicked.addListener(chrome.notifications.clear);
 
     var client = new Faye.Client('https://pubsub.firmafon.dk/faye');
-    //Faye.logger = window.console;
-    
+
     client.addExtension({
         outgoing: function (message, callback) {
             message.ext = { app: 'Firmafon Chrome Extension', access_token: token };
@@ -116,49 +185,7 @@ function initFaye(token, employeeId, companyId) {
         }
     });
 
-    function handleCall(call) {
-        if (call.direction === 'incoming') {
-            switch (call.status) {
-
-                case 'new':
-                    var options = notificationsOptions;
-                    $.extend(options, {
-                        title: 'Incoming call from',
-                        message: call.endpoint_name + '\n' + call.from_number,
-                    })
-                    chrome.notifications.create(call.call_uuid, options);
-                    break;
-
-                case 'answered':
-                case 'missed':
-                case 'voicemail':
-                case 'orphaned':
-                    chrome.notifications.clear(call.call_uuid, function () { });
-                    break;
-
-            }
-
-        }
-    }
-
-    //handleCall({
-    //    "call_uuid": "c1159322-3e82-11e8-867e-ed7ff40728d9",
-    //    "company_id": "6917",
-    //    "endpoint": "Employee#20621",
-    //    "started_at": "2018-04-12T18:53:14Z",
-    //    "from_number": "4528972584",
-    //    "to_number": "4522755229",
-    //    "direction": "incoming",
-    //    "status": "new",
-    //    "from_number_hidden": "false",
-    //    "endpoint_name": "Dennis Flæng Jørgensen",
-    //    "switch": "b15",
-    //    "a_leg_session_uuid": "c10c065e-3e82-11e8-8653-ed7ff40728d9"
-    //});
-
     client.subscribe('/call2/employee/' + employeeId, function (message) {
-        //console.log('/call2/employee/' + employeeId, message);
-
         var data = message.data;
         handleCall(data);
     });

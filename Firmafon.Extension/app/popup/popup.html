@@ -19,10 +19,20 @@
 
         <div id="call-section" class="section">
             <div class="welcome">
-                <button class="signout-button">
-                    <i class="fa fa-sign-out"></i>
+                <button class="settings-button" id="btnShowSettings">
+                    <i class="fa fa-cogs"></i>
                 </button>
-                Hey, <span class="employee-name"></span>
+                <div class="no-wrap">
+                    Hey <b class="employee-name"></b>
+                </div>
+                <div class="no-wrap">
+                    <small>You've been on the phone for</small>
+                </div>
+                <div class="no-wrap">
+                    <small>
+                        <span id="totalCallTime"></span> today
+                    </small>
+                </div>
             </div>
 
             <div ng-controller="CallController">
@@ -47,24 +57,169 @@
 
         </div>
 
-        <a class="issue-link" href="https://github.com/Flaeng/Firmafon.Chrome/issues" target="_blank">
+        <div id="settings-section" class="section">
+            <div class="welcome">
+                <button class="settings-button active" id="btnHideSettings">
+                    <i class="fa fa-cogs"></i>
+                </button>
+                <b>Settings</b>
+                <div class="no-wrap">
+                    <small>
+                        This is the advanced section
+                    </small>
+                </div>
+            </div>
+
+            <a class="issue-link no-wrap" href="https://github.com/Flaeng/Firmafon.Chrome/wiki" target="_blank">
+                <i class="fa fa-external-link"></i>
+                Need help?
+            </a>
+
+            <small>
+                Url variables:
+            </small>
+            <table class="small" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>[number]</td>
+                    <td>=</td>
+                    <td>Phonenumber that you called/that called you</td>
+                </tr>
+                <tr>
+                    <td>[duration]</td>
+                    <td>=</td>
+                    <td>Duration of the call</td>
+                </tr>
+            </table>
+
+
+
+            <div class="trigger-rule">
+                <h3>Rule #1</h3>
+
+                <label class="checkbox" for="rule1checkbox">
+                    <input type="checkbox" id="rule1checkbox" />
+                    <span>Enabled</span>
+                </label>
+
+                <select>
+                    <option>Always open url</option>
+                    <option>Open as confirmation-notification</option>
+                </select>
+
+                <select>
+                    <option>On incoming call answered</option>
+                    <option>On outgoing call answered</option>
+                    <option>On any call answered</option>
+
+                    <option>On incoming call hung up</option>
+                    <option>On outgoing call hung up</option>
+                    <option>On any answered call hung up</option>
+                </select>
+
+                <div>
+                    Open url:
+                    <input type="text" />
+                </div>
+            </div>
+
+
+
+            <div class="trigger-rule">
+                <h3>Rule #2</h3>
+
+                <label class="checkbox" for="rule1checkbox">
+                    <input type="checkbox" id="rule1checkbox" />
+                    <span>Enabled</span>
+                </label>
+
+                <select>
+                    <option>Always open url</option>
+                    <option>Open as confirmation-notification</option>
+                </select>
+
+                <select>
+                    <option>On incoming call answered</option>
+                    <option>On outgoing call answered</option>
+                    <option>On any call answered</option>
+
+                    <option>On incoming call hung up</option>
+                    <option>On outgoing call hung up</option>
+                    <option>On any answered call hung up</option>
+                </select>
+
+                <div>
+                    Open url:
+                    <input type="text" />
+                </div>
+            </div>
+
+
+
+            <div class="trigger-rule">
+                <h3>Rule #3</h3>
+
+                <label class="checkbox" for="rule1checkbox">
+                    <input type="checkbox" id="rule1checkbox" />
+                    <span>Enabled</span>
+                </label>
+
+                <select>
+                    <option>Always open url</option>
+                    <option>Open as confirmation-notification</option>
+                </select>
+
+                <select>
+                    <option>On incoming call answered</option>
+                    <option>On outgoing call answered</option>
+                    <option>On any call answered</option>
+
+                    <option>On incoming call hung up</option>
+                    <option>On outgoing call hung up</option>
+                    <option>On any answered call hung up</option>
+                </select>
+
+                <div>
+                    Open url:
+                    <input type="text" />
+                </div>
+            </div>
+
+
+
+            <button class="add-rule">
+                <i class="fa fa-plus"></i>
+                New rule
+            </button>
+
+            <button class="signout-button">
+                <i class="fa fa-sign-out"></i>
+                Sign out
+            </button>
+        </div>
+
+
+        <a class="issue-link no-wrap" href="https://github.com/Flaeng/Firmafon.Chrome/issues" target="_blank">
             <i class="fa fa-github"></i>
             Report Bug / Request Feature
         </a>
         <div class="disclaimer">
-            This plugin is <u>NOT</u> made by Firmafon<br />
-            Please do not contact Firmafon for support for this extension
+            <div class="no-wrap">This plugin is <u>NOT</u> made by Firmafon</div>
+            <div class="no-wrap">Please do not contact Firmafon for support for this extension</div>
         </div>
+
+        <!--<button id="btnFakeCall">
+            Fake call
+        </button>-->
 
     </div>
 
     <script src="../thirdparty/jquery-3.3.1.min.js"></script>
     <!--<script src="../thirdparty/angular-1.6.9.min.js"></script>-->
+    <!--<script src="https://www.google-analytics.com/analytics_debug.js"></script>-->
     <script src="https://www.google-analytics.com/analytics.js"></script>
     <script src="../services/firmafon.js"></script>
     <script src="../services/helper.js"></script>
     <script src="../services/analytics.js"></script>
     <script src="popup.js"></script>
-    <!--<script src="https://www.google-analytics.com/analytics_debug.js" async></script>-->
 </body>
 </html>

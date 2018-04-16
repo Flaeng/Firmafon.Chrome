@@ -37,6 +37,7 @@ function closeExtensionWindow() {
 //login-form
 function initWithAccessToken(token) {
 
+    firmafon.init(token);
     firmafon.getCurrentEmployee(function (employee) {
 
         if (employee) {
@@ -59,6 +60,7 @@ function init() {
             fetchLastestCalls();
             fetchVoiceMails();
             $("#call-number").focus();
+            firmafon.init(accessToken);
         } else {
             $("#call-section").css("display", "none");
             $("#login-section").css("display", "block");
@@ -73,8 +75,34 @@ $(".authorize-button").click(function () {
     closeExtensionWindow();
 });
 
+helper.fetchTotalCallTime(function (callTime) {
+    $("#totalCallTime").html(helper.formatDuration(callTime));
+});
 
 //call-form
+var fakeCall = {
+    "call_uuid": "c1159322-3e82-11e8-867e-ed7ff40728d9",
+    "company_id": "6917",
+    "endpoint": "Employee#20621",
+    "started_at": "2018-04-12T18:53:14Z",
+    //"from_number": "4528972584",
+    "from_number": null,
+    "to_number": "4522755229",
+    "direction": "incoming",
+    "status": "new",
+    "from_number_hidden": "false",
+    "endpoint_name": "Dennis Flæng Jørgensen",
+    "switch": "b15",
+    "a_leg_session_uuid": "c10c065e-3e82-11e8-8653-ed7ff40728d9"
+};
+$("#btnFakeCall").click(function () {
+    handleCall(fakeCall);
+});
+
+
+window.onerror = function (message, source, lineno, colno, error) {
+    helper.logError(message, source, lineno, colno, error);
+};
 
 $("#call-form").submit(function (e) {
     analytics.trackEvent('popup', 'calling number');
@@ -178,8 +206,10 @@ function fetchLastestCalls() {
                     'missed' :
                     callItem.status;
 
-            item.html('<b>' + anchorText + '</b><br /><small>' + helper.formatDate(date) + ' - ' + status + ' - ' + helper.formatDuration(callItem.talk_duration) + '</small>');
-
+            if (status == 'missed' || !callItem.talk_duration)
+                item.html('<b>' + anchorText + '</b><small>' + helper.formatDate(date) + ' - ' + status + '</small>');
+            else
+                item.html('<b>' + anchorText + '</b><small>' + helper.formatDate(date) + ' - ' + status + ' - ' + helper.formatDuration(callItem.talk_duration) + '</small>');
 
             let telAnchor = $("<a>");
             telAnchor.addClass('display-block');
@@ -220,3 +250,15 @@ function call(phoneNo) {
         closeExtensionWindow();
     });
 }
+
+$("#btnShowSettings").click(function () {
+    var width = $("#call-section").width();
+    $("#settings-section").css('min-width', width);
+    $("#call-section").hide();
+    $("#settings-section").show();
+});
+
+$("#btnHideSettings").click(function () {
+    $("#call-section").show();
+    $("#settings-section").hide();
+});
