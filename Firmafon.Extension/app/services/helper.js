@@ -1,15 +1,6 @@
 ﻿
 var helper = {
 
-    formatPhoneNoForFirmafon: function (phoneNo) {
-        phoneNo = phoneNo.replace(/ /g, '');
-        phoneNo = phoneNo.replace("+", "00");
-        if (phoneNo.indexOf('00') != 0 && phoneNo.length == 8) {
-            phoneNo = "45" + phoneNo;
-        }
-        return phoneNo;
-    },
-
     formatPhoneNo: function (phoneNo) {
 
         if (!phoneNo)

@@ -31,10 +31,7 @@ function resetApp() {
     helper.setAccessToken(null, init);
 }
 function closeExtensionWindow() {
-    chrome.tabs.getCurrent(function (currentTab) {
-        if (currentTab)
-            chrome.tabs.remove(currentTab.id);
-    });
+    window.close();
 }
 
 //login-form
@@ -151,7 +148,7 @@ function fetchLastestCalls() {
         for (var i = 0; i < data.length; i++) {
             let callItem = data[i];
 
-            console.log('callItem', callItem);
+            //console.log('callItem', callItem);
 
             let isIngoing = callItem.direction === 'incoming';
 
@@ -217,6 +214,8 @@ function mailto(email) {
 
 //helpers
 function call(phoneNo) {
+    //let phoneNoFormatted = firmafon.formatPhoneNo(phoneNo);
+    //alert('Calling: ' + phoneNoFormatted);
     firmafon.call(phoneNo, accessToken, function () {
         closeExtensionWindow();
     });

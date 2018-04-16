@@ -33,10 +33,19 @@ var firmafon = {
         });
     },
 
+    formatPhoneNo: function (phoneNo) {
+        phoneNo = phoneNo.replace(/ /g, '');
+        phoneNo = phoneNo.replace("+", "00");
+        if (phoneNo.indexOf('00') != 0 && phoneNo.length == 8) {
+            phoneNo = "45" + phoneNo;
+        }
+        return phoneNo;
+    },
+
     call: function (phoneNo, accessToken, callback) {
-        let url = apiRootPath + "api/v2/switch/dial?to_number=" + phoneNo + "&access_token=" + accessToken;
+        let url = apiRootPath + "api/v2/switch/dial?to_number=" + this.formatPhoneNo(phoneNo) + "&access_token=" + accessToken;
         console.log('POST', url);
-        jQuery.post(url, null, callback);
+        //jQuery.post(url, null, callback);
     },
 
     authenticate: function () {

@@ -5,7 +5,7 @@ $("body").on("click", "a[href^='tel:']", function (event) {
     let url = $(this).attr('href');
     let encodedPhoneNo = url.split('tel:')[1].replace(/%20/g, '');
     let phoneNo = decodeURIComponent(encodedPhoneNo);
-    phoneNo = helper.formatPhoneNoForFirmafon(phoneNo);
+    phoneNo = firmafon.formatPhoneNo(phoneNo);
 
     //Get user confirmation that they wanna call the number
     chrome.runtime.sendMessage({ type: "ga", category: "tel-overrider", action: "confirming call" });
