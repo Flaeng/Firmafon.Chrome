@@ -31,10 +31,7 @@ function resetApp() {
     helper.setAccessToken(null, init);
 }
 function closeExtensionWindow() {
-    chrome.tabs.getCurrent(function (currentTab) {
-        if (currentTab)
-            chrome.tabs.remove(currentTab.id);
-    });
+    window.close();
 }
 
 //login-form
@@ -106,9 +103,9 @@ function fetchVoiceMails() {
             let item = $("<div>");
             item.attr('class', 'voicemail-item list-item');
 
-            let anchorText = 'Unknown (+' + callItem.from_number + ')';
+            let anchorText = 'Unknown (' + helper.formatPhoneNo(callItem.from_number) + ')';
             if (callItem.from_contact && callItem.from_contact.name) {
-                anchorText = callItem.from_contact.name;
+                anchorText = callItem.from_contact.name + '(+' + callItem.from_number + ')';
             }
             let date = new Date(callItem.created_at);
             item.html('<b>' + anchorText + '</b><br /><small>' + helper.formatDate(date) + '</small>');
@@ -127,7 +124,7 @@ function fetchVoiceMails() {
             callbackAnchor.click(function () {
                 call(callItem.from_number);
             });
-            callbackAnchor.html('<i class="fa fa-phone"></i> ' + callItem.from_number_formatted);
+            callbackAnchor.html('<i class="fa fa-phone"></i> ' + helper.formatPhoneNo(callItem.from_number_formatted));
             callbackAnchor.appendTo(item);
 
             voiceMails.append(item);
@@ -151,12 +148,12 @@ function fetchLastestCalls() {
         for (var i = 0; i < data.length; i++) {
             let callItem = data[i];
 
-            console.log('callItem', callItem);
+            //console.log('callItem', callItem);
 
             let isIngoing = callItem.direction === 'incoming';
 
             let contact = isIngoing ? callItem.from_contact : callItem.to_contact;
-            let number = (isIngoing ? callItem.from_number : callItem.to_number).toString();
+            let number = helper.formatPhoneNo(isIngoing ? callItem.from_number : callItem.to_number);
             let numberFormatted = isIngoing ? callItem.from_number_formatted : callItem.to_number_formatted;
             let email = isIngoing ? callItem.from_contact.email : callItem.to_contact.email;
             //console.log('contact', contact);
@@ -217,6 +214,8 @@ function mailto(email) {
 
 //helpers
 function call(phoneNo) {
+    //let phoneNoFormatted = firmafon.formatPhoneNo(phoneNo);
+    //alert('Calling: ' + phoneNoFormatted);
     firmafon.call(phoneNo, accessToken, function () {
         closeExtensionWindow();
     });
