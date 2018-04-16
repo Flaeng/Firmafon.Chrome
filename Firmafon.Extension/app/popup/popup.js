@@ -127,7 +127,7 @@ function fetchVoiceMails() {
             callbackAnchor.click(function () {
                 call(callItem.from_number);
             });
-            callbackAnchor.html('<i class="fa fa-phone"></i> ' + callItem.from_number_formatted);
+            callbackAnchor.html('<i class="fa fa-phone"></i> ' + helper.formatPhoneNo(callItem.from_number_formatted));
             callbackAnchor.appendTo(item);
 
             voiceMails.append(item);
