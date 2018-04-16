@@ -1,0 +1,29 @@
+﻿
+
+<div ng-show="items.length === 0">
+    You've heard all your voicemails
+</div>
+<div class="voicemails">
+
+    <div class="list-item" ng-repeat="item in items">
+
+        <b class="display-block no-wrap" ng-bind="item.from_contact.name | contact:item.from_number"></b>
+        <small class="display-block no-wrap" ng-bind="item.started_at | date"></small>
+
+        <a class="display-block no-wrap" href="#" ng-click="listenToVoicemail(item.uuid, item.url)">
+            <i class="fa fa-phone-square"></i>
+            Listen to voicemail
+        </a>
+
+        <a class="display-block no-wrap" href="#" ng-click="mailTo(item.from_contact.email)" ng-show="item.from_contact.email">
+            <i class="fa fa-envelope"></i>
+            <span ng-bind="item.from_contact.email"></span>
+        </a>
+
+        <a class="display-block no-wrap" href="#" ng-click="call(item.phoneNumber)">
+            <i class="fa fa-phone"></i>
+            <span ng-bind="item.from_number | phoneNo"></span>
+        </a>
+
+    </div>
+</div>

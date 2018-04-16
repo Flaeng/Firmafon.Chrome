@@ -36,20 +36,22 @@ var firmafon = {
     formatPhoneNo: function (phoneNo) {
         phoneNo = phoneNo.replace(/ /g, '');
         phoneNo = phoneNo.replace("+", "00");
-        if (phoneNo.indexOf('00') != 0 && phoneNo.length == 8) {
+        if (phoneNo.indexOf('00') !== 0 && phoneNo.length === 8) {
             phoneNo = "45" + phoneNo;
         }
         return phoneNo;
     },
 
-    call: function (phoneNo, accessToken, callback) {
-        let url = apiRootPath + "api/v2/switch/dial?to_number=" + this.formatPhoneNo(phoneNo) + "&access_token=" + accessToken;
-        console.log('POST', url);
-        //jQuery.post(url, null, callback);
+    call: function (phoneNo, callback) {
+        if (phoneNo) {
+            let url = apiRootPath + "api/v2/switch/dial?to_number=" + this.formatPhoneNo(phoneNo) + "&access_token=" + this.accessToken;
+            console.log('POST', url);
+            //jQuery.post(url, null, callback);
+        }
     },
 
-    authenticate: function () {
-
+    authenticate: function (callback) {
+        chrome.tabs.create({ url: authorizeLink });
     },
 
     getAccessTokenFromCode: function (code, callback) {
@@ -75,8 +77,8 @@ var firmafon = {
     getUnheardVoiceMails: function (limit, callback) {
         var url = apiRootPath + 'api/v2/voice_mails?limit=' + limit + '&access_token=' + this.accessToken;
         jQuery.get(url, function (data) {
-            var vMails = $.grep(data.voice_mails, function (elem) {
-                return !elem.heard;
+            var vMails = $.grep(data.voice_mails, function (elem, i) {
+                return i <= 3; //!elem.heard;
             });
             //console.log('vMails', vMails);
             callback(vMails);
@@ -88,7 +90,7 @@ var firmafon = {
         jQuery.get(url, function (data) {
             callback(data.calls);
         });
-    },
+    }
 
 };
 
@@ -99,6 +101,11 @@ var notificationsOptions = {
     iconUrl: '../logo.png'
 };
 function handleCall(call) {
+
+    helper.fetchRules(function (rules) {
+        handleCallRules(call, rules);
+    });
+
     if (call.direction === 'incoming') {
         switch (call.status) {
 
@@ -106,8 +113,8 @@ function handleCall(call) {
                 var options = notificationsOptions;
                 $.extend(options, {
                     title: 'Incoming call from',
-                    message: call.endpoint_name + '\n' + helper.formatPhoneNo(call.from_number),
-                })
+                    message: call.endpoint_name + '\n' + helper.formatPhoneNo(call.from_number)
+                });
                 chrome.notifications.create(call.call_uuid, options);
                 animateCall(3);
                 break;
@@ -120,13 +127,84 @@ function handleCall(call) {
                 break;
 
         }
-
     }
+
 }
+
+var ruleNotificationCache = {};
+function handleCallRules(call, rules) {
+
+    rules = $.grep(rules, function (elem) {
+        let isCorrectDirection = elem.trigger.indexOf(call.direction + '_') === 0 || elem.trigger.indexOf('call_') === 0;
+        var isCorrectStatus = elem.trigger.indexOf('_' + call.status) !== -1;
+        return elem.isEnabled && isCorrectDirection && isCorrectStatus;
+    });
+    $.each(rules, function (i, rule) {
+
+        let url = rule.url;
+        let phoneNumber = call.direction === 'incoming' ? call.from_number : call.to_number;
+        url = url.replace('[number]', phoneNumber);
+        url = url.replace('[duration]', call.duration);
+
+
+        if (rule.shouldPrompt) {
+            let options = notificationsOptions;
+            $.extend(options, {
+                title: 'Rule triggered: ' + rule.name,
+                message: url
+            });
+            ruleNotificationCache[rule.udid] = function () {
+                chrome.tabs.create({
+                    url: url,
+                    active: true
+                });
+            };
+            chrome.notifications.create(rule.uuid, options);
+        } else {
+            chrome.tabs.create({
+                url: url,
+                active: false
+            });
+        }
+
+    });
+}
+
+
+chrome.notifications.onClicked.addListener(function (id) {
+
+    if (id.indexOf('incoming_call_') === 0) {
+        chrome.notifications.clear(id);
+
+    } else if (ruleNotificationCache[id]) {
+        ruleNotificationCache[id]();
+        ruleNotificationCache[id] = null;
+    }
+});
+
+function initFaye(token, employeeId, companyId) {
+
+    var client = new Faye.Client('https://pubsub.firmafon.dk/faye');
+
+    client.addExtension({
+        outgoing: function (message, callback) {
+            message.ext = { app: 'Firmafon Chrome Extension', access_token: token };
+            callback(message);
+        }
+    });
+
+    client.subscribe('/call2/employee/' + employeeId, function (message) {
+        var data = message.data;
+        handleCall(data);
+    });
+}
+
+
+
 
 var animationInterval = 100;
 function animateCall(numberOfCycles) {
-    if (numberOfCycles == 0)
+    if (numberOfCycles === 0)
         return;
 
     setTimeout(function () {
@@ -157,9 +235,9 @@ function animateCall(numberOfCycles) {
                                         helper.setBadge('_____');
 
                                         numberOfCycles--;
-                                        if (numberOfCycles == 0)
+                                        if (numberOfCycles === 0)
                                             helper.setBadge('');
-                                        else 
+                                        else
                                             animateCall(numberOfCycles);
 
                                     }, animationInterval);
@@ -171,22 +249,4 @@ function animateCall(numberOfCycles) {
             }, animationInterval);
         }, animationInterval);
     }, animationInterval);
-}
-
-function initFaye(token, employeeId, companyId) {
-    chrome.notifications.onClicked.addListener(chrome.notifications.clear);
-
-    var client = new Faye.Client('https://pubsub.firmafon.dk/faye');
-
-    client.addExtension({
-        outgoing: function (message, callback) {
-            message.ext = { app: 'Firmafon Chrome Extension', access_token: token };
-            callback(message);
-        }
-    });
-
-    client.subscribe('/call2/employee/' + employeeId, function (message) {
-        var data = message.data;
-        handleCall(data);
-    });
 }

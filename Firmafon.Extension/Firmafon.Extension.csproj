@@ -72,6 +72,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\background\background.js" />
+    <Content Include="app\popup\templates\call-item.html" />
+    <Content Include="app\popup\templates\trigger-rule.html" />
+    <Content Include="app\popup\templates\voicemail-item.html" />
     <Content Include="app\services\analytics.js" />
     <Content Include="app\thirdparty\angular-1.6.9.min.js" />
     <Content Include="app\thirdparty\font-awesome-4.7.0.min.css" />

@@ -1,13 +1,19 @@
-﻿.section {
-    display: none;
-}
-
+﻿
 a, button, [onclick] {
     cursor: pointer;
 }
 
 h3 {
     margin-bottom: 0;
+}
+
+a {
+    color: #666;
+    text-decoration: none;
+
+    &:hover {
+        color: #000;
+    }
 }
 
 .display-block {
@@ -20,19 +26,18 @@ h3 {
 
 #login-form {
     button {
-        white-space: nowrap;
+        .no-wrap();
         padding: 1rem;
     }
 }
 
-.welcome {
-    white-space: nowrap;
-    /*line-height:26px;*/
+.header {
+    .no-wrap();
 
     &:after {
-        display:block;
-        content:' ';
-        clear:both;
+        display: block;
+        content: ' ';
+        clear: both;
     }
 }
 
@@ -52,9 +57,11 @@ select {
     border: 1px solid #cad0d6;
     border-radius: .25rem;
 }
+
 input {
     padding: 5px;
 }
+
 button {
     padding: .375rem .75rem;
 }
@@ -62,7 +69,7 @@ button {
 .call-item {
     b, small, a {
         display: block;
-        .no-wrap()
+        .no-wrap();
     }
 }
 
@@ -148,9 +155,9 @@ button {
 
 table.small {
     th, td {
-        font-size:smaller;
-        vertical-align:top;
-        white-space:nowrap;
+        font-size: smaller;
+        vertical-align: top;
+        white-space: nowrap;
     }
 }
 
@@ -158,24 +165,66 @@ table.small {
 
 
     input[type=checkbox] {
-        width:auto;
+        width: auto;
     }
+
     .checkbox {
         span {
-            position:relative;
-            top:-3px;
+            position: relative;
+            top: -3px;
         }
     }
 
     input {
-        width:calc(~'100% - 12px');
+        width: calc(~'100% - 12px');
     }
 
-    > input, 
-    > select, 
-    > textarea, 
+    > input,
+    > select,
+    > textarea,
     > .checkbox {
-        width:100%;
+        width: 100%;
         margin: 5px 0;
     }
+}
+
+.red-bg {
+    background-color: darkred;
+    border-color: darkred;
+}
+
+.green-bg {
+    background-color: green;
+    border-color: green;
+}
+
+.confirmation {
+    padding:10px 5px;
+    margin:5px 0;
+
+    .options {
+        margin-top:5px;
+        display: flex;
+
+        > button {
+            flex: 1;
+            margin-right: 5px;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+}
+
+.text-center {
+    text-align: center;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.delete-rule-button {
+    margin: 10px 0;
 }

@@ -23,7 +23,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(function (details) {
 }, {
         url: [{
             hostContains: 'firmafon-auth-complete'
-        }],
+        }]
     });
 
 
@@ -31,13 +31,13 @@ function calcTotalCallTime(data) {
     firmafon.getCurrentEmployee(function (emp) {
         var callTime = 0;
 
-        var date = new Date()
+        var date = new Date();
         var yyyy = date.getFullYear().toString();
         var MM = (date.getMonth() + 1).toString();
-        if (MM.length == 1)
+        if (MM.length === 1)
             MM = '0' + MM;
         var dd = date.getDate().toString();
-        if (dd.length == 1)
+        if (dd.length === 1)
             dd = '0' + dd;
 
         var dateAsText = yyyy + '-' + MM + '-' + dd;
@@ -50,7 +50,9 @@ function calcTotalCallTime(data) {
                 break;
 
             if (call.direction === 'incoming') {
-                if (call.endpoint === 'Employee#' + emp.id || (call.answered_by && call.answered_by.id === emp.id)) {
+                if (call.endpoint === 'Employee#' + emp.id) {
+                    callTime += call.talk_duration;
+                } else if (call.answered_by && call.answered_by.id === emp.id) {
                     callTime += call.talk_duration;
                 } else {
                     //console.log('incoming call', call);
