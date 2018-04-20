@@ -72,22 +72,31 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\background\background.js" />
+    <Content Include="app\options\options.css">
+      <DependentUpon>options.less</DependentUpon>
+    </Content>
+    <Content Include="app\options\options.min.css">
+      <DependentUpon>options.css</DependentUpon>
+    </Content>
+    <Content Include="app\popup\popup.css">
+      <DependentUpon>popup.less</DependentUpon>
+    </Content>
+    <Content Include="app\options\options.html" />
+    <Content Include="app\options\options.js" />
+    <Content Include="app\popup\popup.min.css">
+      <DependentUpon>popup.css</DependentUpon>
+    </Content>
+    <Content Include="app\options\templates\trigger-rule.html" />
     <Content Include="app\popup\templates\call-item.html" />
-    <Content Include="app\popup\templates\trigger-rule.html" />
     <Content Include="app\popup\templates\voicemail-item.html" />
+    <Content Include="app\app.js" />
     <Content Include="app\services\analytics.js" />
     <Content Include="app\thirdparty\angular-1.6.9.min.js" />
     <Content Include="app\thirdparty\font-awesome-4.7.0.min.css" />
     <Content Include="app\thirdparty\jquery-3.3.1.min.js" />
     <Content Include="app\logo.png" />
-    <Content Include="app\popup\popup.css">
-      <DependentUpon>popup.less</DependentUpon>
-    </Content>
     <Content Include="app\popup\popup.html" />
     <Content Include="app\popup\popup.js" />
-    <Content Include="app\popup\popup.min.css">
-      <DependentUpon>popup.css</DependentUpon>
-    </Content>
     <Content Include="app\services\firmafon.js" />
     <Content Include="app\services\helper.js" />
     <Content Include="app\background\tel-overrider.js" />
@@ -97,8 +106,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\popup\popup.less" />
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include="app\styles.less" />
+    <Content Include="app\options\options.less" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>

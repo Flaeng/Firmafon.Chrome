@@ -8,6 +8,11 @@
     "default_popup": "popup/popup.html",
     "default_title": "Firmafon Caller"
   },
+  "background": {
+    "page": "background/background.html",
+    "persistent": false
+  },
+  "options_page": "options/options.html",
   "permissions": [
     "activeTab",
     "storage",
@@ -15,10 +20,6 @@
     "notifications",
     "tabs"
   ],
-  "background": {
-    "page": "background/background.html",
-    "persistent": false
-  },
   "content_security_policy": "script-src 'self' https://pubsub.firmafon.dk https://www.google-analytics.com; object-src 'self'",
   "content_scripts": [
     {

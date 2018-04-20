@@ -1,0 +1,76 @@
+﻿
+<div class="form-group">
+    <label>Name:</label>
+    <input type="text" ng-model="item.name" />
+</div>
+
+<div class="form-group">
+    <label>Url</label>
+    <input type="text" ng-model="item.url"
+           placeholder="http://www.google.com/?q=I just talked with [number] for [duration] seconds - i know him as [contactid]" />
+</div>
+
+<div class="form-group">
+    <input type="checkbox" ng-model="item.paused" />
+    <label>Paused</label>
+</div>
+
+<div class="form-group">
+    <label>Enabled:</label>
+    <select ng-model="item.enabled">
+        <option value="allways">allways</option>
+        <option value="contact">when called by a contact</option>
+        <option value="unknown">when called by non-contact</option>
+    </select>
+</div>
+
+<div class="form-group form-group-inline">
+
+    <label>When</label>
+
+    <select ng-model="item.direction">
+        <option value="any">any call</option>
+        <option value="incoming">incoming call</option>
+        <option value="outgoing">outgoing call</option>
+    </select>
+
+    <label>is</label>
+
+    <select ng-model="item.trigger">
+        <option value="ringing">ringing</option>
+        <option value="answer">answered</option>
+        <option value="hangup">hung up</option>
+    </select>
+
+    <label>open</label>
+
+    <select ng-model="item.shouldPrompt">
+        <option value="true">a notification, if it is clicked open the url</option>
+        <option value="false">the url</option>
+    </select>
+
+</div>
+
+<div class="form-group">
+    <label>Export (click the box to copy rule):</label>
+    <input type="text" class="export-code" ng-value="item | json" ng-click="exportFocus($event.target)" readonly="readonly" />
+</div>
+
+<div class="confirmation" ng-show="showDelete">
+    <div class="text-center">
+        <b>Are you sure?</b>
+    </div>
+    <div class="options">
+        <button class="green-bg" ng-click="deleteRule(item)">
+            Yes
+        </button>
+        <button class="red-bg" ng-click="showDelete = false">
+            No
+        </button>
+    </div>
+</div>
+
+<button class="red-bg display-block full-width delete-rule-button" ng-click="showDelete = true" ng-hide="showDelete">
+    <i class="fa fa-trash"></i>
+    Delete rule
+</button>

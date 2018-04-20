@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Firmafon</title>
+    <link rel="stylesheet" href="../thirdparty/font-awesome-4.7.0.min.css" />
+    <link rel="stylesheet" href="options.css" />
+</head>
+<body ng-app="FirmafonExtension">
+
+    <div class="wrapper" ng-controller="SettingsController">
+
+        <div class="content-container">
+
+            <div class="header">
+                <h3>What's new?</h3>
+                <small class="no-wrap">
+                    Changes in the past updates
+                </small>
+            </div>
+            <div class="content">
+                Not much - This is the first release
+            </div>
+
+
+            <div class="header">
+                <h3>Triggers</h3>
+                <small class="no-wrap">
+                    Create triggers that opens website on call events
+                </small>
+            </div>
+
+            <div class="content">
+                <b>Url variables:</b>
+
+                <table>
+                    <tr>
+                        <td>[number]</td>
+                        <td>=></td>
+                        <td>Phonenumber that you called/that called you</td>
+                    </tr>
+                    <tr>
+                        <td>[duration]</td>
+                        <td>=></td>
+                        <td>Duration of the call</td>
+                    </tr>
+                    <tr>
+                        <td>[contactid]</td>
+                        <td>=></td>
+                        <td>ID of the contact, if caller is contact</td>
+                    </tr>
+                </table>
+
+                <div class="import-group">
+                    <label>Import rule by pasting it into this box:</label>
+                    <input type="text" class="import-code" ng-model="import" />
+                </div>
+
+                <div class="trigger-rules">
+                    <div ng-repeat="item in rules" ng-include="'templates/trigger-rule.html'"
+                         class="trigger-rule" ng-init="showDelete = false" ng-controller="TriggerRuleController"></div>
+                </div>
+
+
+                <div class="display-flex spacing-top">
+                    <div class="flex-1">
+                        <button class="newrule-button" ng-click="newRule()">
+                            <i class="fa fa-plus"></i>
+                            New rule
+                        </button>
+                    </div>
+                    <div class="flex-1 text-right">
+                        <button class="signout-button" ng-click="signOut()">
+                            <i class="fa fa-sign-out"></i>
+                            Sign out
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="footer">
+            <a class="issue-link display-block no-wrap" href="https://github.com/Flaeng/Firmafon.Chrome/issues" target="_blank">
+                <i class="fa fa-github"></i>
+                Report Bug / Request Feature
+            </a>
+
+            <div class="disclaimer">
+                <div class="no-wrap">This plugin is <u>NOT</u> made by Firmafon</div>
+                <div class="no-wrap">Please do not contact Firmafon for support for this extension</div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script src="../thirdparty/jquery-3.3.1.min.js"></script>
+    <script src="../thirdparty/angular-1.6.9.min.js"></script>
+    <!--<script src="https://www.google-analytics.com/analytics_debug.js"></script>-->
+    <script src="https://www.google-analytics.com/analytics.js"></script>
+    <script src="../services/helper.js"></script>
+    <script src="../services/analytics.js"></script>
+    <script src="../app.js"></script>
+    <script src="options.js"></script>
+</body>
+</html>

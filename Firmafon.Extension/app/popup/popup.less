@@ -1,27 +1,7 @@
-﻿
-a, button, [onclick] {
-    cursor: pointer;
-}
+﻿@import '../styles.less';
 
 h3 {
     margin-bottom: 0;
-}
-
-a {
-    color: #666;
-    text-decoration: none;
-
-    &:hover {
-        color: #000;
-    }
-}
-
-.display-block {
-    display: block;
-}
-
-.no-wrap {
-    white-space: nowrap;
 }
 
 #login-form {
@@ -39,31 +19,10 @@ a {
         content: ' ';
         clear: both;
     }
-}
-
+    
 .settings-button {
     float: right;
-
-    &.active {
-        -webkit-box-shadow: inset 0 5px 5px rgba(0,0,0,.25);
-        box-shadow: inset 0 5px 5px rgba(0,0,0,.25);
-    }
 }
-
-input,
-button,
-textarea,
-select {
-    border: 1px solid #cad0d6;
-    border-radius: .25rem;
-}
-
-input {
-    padding: 5px;
-}
-
-button {
-    padding: .375rem .75rem;
 }
 
 .call-item {
@@ -101,11 +60,6 @@ button {
     }
 }
 
-.disclaimer {
-    text-align: center;
-    font-size: .5rem;
-}
-
 .authorize-button {
     display: block;
     width: 100%;
@@ -126,105 +80,6 @@ button {
     &:hover {
         color: #e3e2de;
     }
+
 }
 
-button {
-    text-align: center;
-    background-color: #31775a;
-    border-color: #31775a;
-    color: #FFF;
-
-    &:hover {
-        color: #e3e2de;
-    }
-}
-
-
-#settings-section {
-
-
-
-
-    .add-rule,
-    .signout-button {
-        margin-top: 20px;
-        width: 100%;
-    }
-}
-
-
-table.small {
-    th, td {
-        font-size: smaller;
-        vertical-align: top;
-        white-space: nowrap;
-    }
-}
-
-.trigger-rule {
-
-
-    input[type=checkbox] {
-        width: auto;
-    }
-
-    .checkbox {
-        span {
-            position: relative;
-            top: -3px;
-        }
-    }
-
-    input {
-        width: calc(~'100% - 12px');
-    }
-
-    > input,
-    > select,
-    > textarea,
-    > .checkbox {
-        width: 100%;
-        margin: 5px 0;
-    }
-}
-
-.red-bg {
-    background-color: darkred;
-    border-color: darkred;
-}
-
-.green-bg {
-    background-color: green;
-    border-color: green;
-}
-
-.confirmation {
-    padding:10px 5px;
-    margin:5px 0;
-
-    .options {
-        margin-top:5px;
-        display: flex;
-
-        > button {
-            flex: 1;
-            margin-right: 5px;
-
-            &:last-child {
-                margin-right: 0;
-            }
-        }
-    }
-}
-
-.text-center {
-    text-align: center;
-}
-
-.full-width {
-    width: 100%;
-}
-
-.delete-rule-button {
-    margin: 10px 0;
-}

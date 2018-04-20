@@ -1,0 +1,105 @@
+﻿@import '../styles.less';
+
+.trigger-rule {
+    
+    border-bottom: 1px solid #000;
+    &:first-child {
+        border-top: 1px solid #000;
+    }
+    &:not(:first-child) {
+        border-top: 0;
+    }
+
+    input[type=checkbox] {
+        width: auto;
+    }
+
+    .checkbox {
+        label {
+            position: relative;
+            top: -3px;
+        }
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    .form-group {
+        margin: 10px 0;
+    }
+
+    input {
+        width: calc(~'100% - 12px');
+    }
+
+    .form-group-inline {
+        input,
+        select,
+        textarea {
+            margin: 0 5px;
+        }
+    }
+}
+
+input[readonly] {
+    background-color: rgb(235, 235, 228);
+}
+
+.delete-rule-button {
+    margin: 10px 0;
+}
+
+body {
+    background-color: #f1f1f1;
+    padding: 0;
+}
+
+.wrapper {
+    width: 800px;
+    margin: 0 auto;
+
+    .content-container {
+        background-color: #fff;
+    }
+
+    .header,
+    .content {
+        padding: 15px;
+    }
+
+    .header {
+        background-color: #31775a;
+        color: #FFF;
+
+        h3 {
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+    
+    .content {
+
+        .import-group {
+            margin: 10px 0;
+
+            label {
+                font-weight: bold;
+            }
+
+            label,
+            input {
+                display: block;
+                width: 100%;
+            }
+        }
+    }
+
+    .footer {
+        margin: 0 auto;
+        width: 230px;
+        text-align: center;
+    }
+
+}

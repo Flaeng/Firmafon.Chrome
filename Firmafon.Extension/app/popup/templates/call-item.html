@@ -2,33 +2,45 @@
 <div class="calls">
     <div class="list-item" ng-repeat="item in items | limitTo:5">
 
-        <div style="float:right" ng-show="item.contact">
-            <button ng-click="mailBusinessCard(item.contact)">
-                <i class="fa fa-id-card-o"></i>
-            </button>
+		<div class="display-flex">
+			<div class="flex-1" style="margin-right:10px">
+			
+				<b class="display-block no-wrap" ng-bind="item.contact.name | contact:item.number"></b>
+				<b class="display-block no-wrap" ng-bind="formatCallerName(item)"></b>
+				<div class="display-block no-wrap">
+					<small ng-bind="item.started_at | date:'short'"></small>
+					-
+					<small ng-bind="item.status | callStatus"></small>
+					<small ng-show="item.status !== 'missed' && item.status !== 'orphaned'">
+						-
+						<span ng-bind="item.talk_duration | duration"></span>
+					</small>
+				</div>
+
+				<a class="display-block no-wrap" href="#" ng-click="mailTo(item.contact.email)" ng-show="item.contact.email">
+					<i class="fa fa-envelope"></i>
+					<span ng-bind="item.contact.email"></span>
+				</a>
+
+				<a class="display-block no-wrap" href="#" ng-click="call(item.number)">
+					<i class="fa fa-phone"></i>
+					<span ng-bind="item.number | phoneNo"></span>
+				</a>
+				
+			</div>
+
+			<div ng-show="item.contact">
+				<button ng-click="mailBusinessCard(item.contact)">
+					<i class="fa fa-address-card-o"></i>
+				</button>
+			</div>
+			
+			<div ng-show="!item.contact">
+				<button ng-click="createContact(item.contact)">
+					<i class="fa fa-address-card"></i>
+				</button>
+			</div>
         </div>
-
-        <b class="display-block no-wrap" ng-bind="item.contact.name | contact:item.number"></b>
-        <b class="display-block no-wrap" ng-bind="formatCallerName(item)"></b>
-        <div class="display-block no-wrap">
-            <small ng-bind="item.started_at | date"></small>
-            -
-            <small ng-bind="item.status | callStatus"></small>
-            <small ng-show="item.status !== 'missed' && item.status !== 'orphaned'">
-                -
-                <span ng-bind="item.talk_duration | duration"></span>
-            </small>
-        </div>
-
-        <a class="display-block no-wrap" href="#" ng-click="mailTo(item.contact.email)" ng-show="item.contact.email">
-            <i class="fa fa-envelope"></i>
-            <span ng-bind="item.contact.email"></span>
-        </a>
-
-        <a class="display-block no-wrap" href="#" ng-click="call(item.number)">
-            <i class="fa fa-phone"></i>
-            <span ng-bind="item.number | phoneNo"></span>
-        </a>
-
+		
     </div>
 </div>

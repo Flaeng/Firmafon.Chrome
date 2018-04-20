@@ -137,7 +137,7 @@ function handleCallRules(call, rules) {
     rules = $.grep(rules, function (elem) {
         let isCorrectDirection = elem.trigger.indexOf(call.direction + '_') === 0 || elem.trigger.indexOf('call_') === 0;
         var isCorrectStatus = elem.trigger.indexOf('_' + call.status) !== -1;
-        return elem.isEnabled && isCorrectDirection && isCorrectStatus;
+        return elem.enabled && isCorrectDirection && isCorrectStatus;
     });
     $.each(rules, function (i, rule) {
 
@@ -171,20 +171,20 @@ function handleCallRules(call, rules) {
 }
 
 
-chrome.notifications.onClicked.addListener(function (id) {
-
-    if (id.indexOf('incoming_call_') === 0) {
-        chrome.notifications.clear(id);
-
-    } else if (ruleNotificationCache[id]) {
-        ruleNotificationCache[id]();
-        ruleNotificationCache[id] = null;
-    }
-});
-
 function initFaye(token, employeeId, companyId) {
 
     var client = new Faye.Client('https://pubsub.firmafon.dk/faye');
+
+	chrome.notifications.onClicked.addListener(function (id) {
+
+		if (id.indexOf('incoming_call_') === 0) {
+			chrome.notifications.clear(id);
+
+		} else if (ruleNotificationCache[id]) {
+			ruleNotificationCache[id]();
+			ruleNotificationCache[id] = null;
+		}
+	});
 
     client.addExtension({
         outgoing: function (message, callback) {

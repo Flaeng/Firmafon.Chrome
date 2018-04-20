@@ -18,95 +18,39 @@
             </form>
         </div>
 
-        <div ng-show="isLoggedIn">
+        <div class="dashboard" ng-show="isLoggedIn">
 
-            <div class="dashboard" ng-show="!showingSettings">
-
-                <div class="header" ng-controller="WelcomeController">
-                    <button class="settings-button" type="submit" ng-click="toggleSettings()">
-                        <i class="fa fa-cogs"></i>
-                    </button>
-                    <div class="no-wrap">
-                        Hey <b ng-bind="currentEmployee.name | firstname"></b>
-                    </div>
-                    <small class="display-block no-wrap">You've been on the phone for</small>
-                    <small class="display-block no-wrap" ng-bind="(totalCallTime | duration) + ' today'"></small>
+            <div class="header" ng-controller="WelcomeController">
+                <button class="settings-button" type="submit" ng-click="toggleSettings()">
+                    <i class="fa fa-cogs"></i>
+                </button>
+                <div class="no-wrap">
+                    Hey <b ng-bind="currentEmployee.name | firstname"></b>
                 </div>
-
-                <div ng-controller="CallController">
-                    <h3>Call</h3>
-                    <form id="call-form" ng-submit="call()">
-                        <input id="call-number" class="call-number" type="tel" ng-model="phoneNumber" autocomplete="off" />
-                        <button class="call-button" type="submit">
-                            <i class="fa fa-phone"></i>
-                        </button>
-                    </form>
-                </div>
-
-                <div ng-controller="RecentCallsController">
-                    <h3>Recent Calls</h3>
-                    <div ng-include="'templates/call-item.html'"></div>
-                </div>
-
-                <div ng-controller="VoiceMailController">
-                    <h3>Voicemails</h3>
-                    <div ng-include="'templates/voicemail-item.html'"></div>
-                </div>
-
+                <small class="display-block no-wrap">You've been on the phone for</small>
+                <small class="display-block no-wrap" ng-bind="(totalCallTime | duration) + ' today'"></small>
             </div>
 
-
-            <div ng-show="showingSettings" ng-controller="SettingsController">
-
-                <div class="header">
-                    <button class="settings-button active" ng-click="toggleSettings()">
-                        <i class="fa fa-cogs"></i>
+            <div ng-controller="CallController">
+                <h3>Call</h3>
+                <form id="call-form" ng-submit="call()">
+                    <input id="call-number" class="call-number" type="tel" ng-model="phoneNumber" autocomplete="off" />
+                    <button class="call-button" type="submit">
+                        <i class="fa fa-phone"></i>
                     </button>
-                    <b>Settings</b>
-                    <div class="no-wrap">
-                        <small>
-                            This is the advanced section
-                        </small>
-                    </div>
-                </div>
-
-                <!--<a class="issue-link no-wrap" href="https://github.com/Flaeng/Firmafon.Chrome/wiki" target="_blank">
-                    <i class="fa fa-external-link"></i>
-                    Need help?
-                </a>-->
-
-                <small>
-                    <b>Url variables:</b>
-                </small>
-
-                <table class="small" border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td>[number]</td>
-                        <td>=</td>
-                        <td>Phonenumber that you called/that called you</td>
-                    </tr>
-                    <tr>
-                        <td>[duration]</td>
-                        <td>=</td>
-                        <td>Duration of the call</td>
-                    </tr>
-                </table>
-
-                <div class="trigger-rules">
-                    <div ng-repeat="item in rules" ng-include="'templates/trigger-rule.html'"></div>
-                </div>
-                <button class="display-block full-width" ng-click="newRule()">
-                    <i class="fa fa-plus"></i>
-                    New rule
-                </button>
-                <br />
-                <br />
-                <br />
-                <button class="display-block full-width" ng-click="signOut()">
-                    <i class="fa fa-sign-out"></i>
-                    Sign out
-                </button>
+                </form>
             </div>
+
+            <div ng-controller="RecentCallsController">
+                <h3>Recent Calls</h3>
+                <div ng-include="'templates/call-item.html'"></div>
+            </div>
+
+            <div ng-controller="VoiceMailController">
+                <h3>Voicemails</h3>
+                <div ng-include="'templates/voicemail-item.html'"></div>
+            </div>
+
         </div>
 
         <div class="footer">
@@ -129,6 +73,7 @@
     <script src="../services/firmafon.js"></script>
     <script src="../services/helper.js"></script>
     <script src="../services/analytics.js"></script>
+    <script src="../app.js"></script>
     <script src="popup.js"></script>
 </body>
 </html>

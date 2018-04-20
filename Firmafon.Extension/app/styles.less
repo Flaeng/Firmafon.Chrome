@@ -1,0 +1,128 @@
+﻿
+a, button, [onclick] {
+    cursor: pointer;
+}
+
+a {
+    color: #666;
+    text-decoration: none;
+
+    &:hover {
+        color: #000;
+    }
+}
+
+table, th, td {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.display-block {
+    display: block;
+}
+.display-flex {
+    display: flex;
+	
+	.flex-1 {
+		flex:1;
+	}
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+input,
+button,
+textarea,
+select {
+    border: 1px solid #cad0d6;
+    border-radius: .25rem;
+}
+
+input {
+    padding: 5px;
+}
+
+button {
+    padding: .375rem .75rem;
+}
+
+.disclaimer {
+    text-align: center;
+    font-size: .5rem;
+}
+
+button {
+    text-align: center;
+    background-color: #31775a;
+    border-color: #31775a;
+    color: #FFF;
+
+    &:hover {
+        color: #e3e2de;
+    }
+}
+
+.red-bg {
+    background-color: darkred;
+    border-color: darkred;
+}
+
+.green-bg {
+    background-color: green;
+    border-color: green;
+}
+
+
+.text-center {
+    text-align: center;
+}
+.text-right {
+    text-align: right;
+}
+
+.spacing {
+    margin:10px;
+}
+.spacing-top {
+    margin-top:10px;
+}
+.spacing-right {
+    margin-right:10px;
+}
+.spacing-bottom {
+    margin-bottom:10px;
+}
+.spacing-left {
+    margin-left:10px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.confirmation {
+    margin: 15px 0;
+
+    .options {
+        margin-top: 5px;
+        display: flex;
+
+        > button {
+            flex: 1;
+            border-radius: 0;
+
+            &:first-child {
+                border-bottom-left-radius: .25rem;
+                border-top-left-radius: .25rem;
+            }
+
+            &:last-child {
+                border-bottom-right-radius: .25rem;
+                border-top-right-radius: .25rem;
+            }
+        }
+    }
+}
